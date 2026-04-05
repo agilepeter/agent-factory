@@ -1,6 +1,6 @@
 # Agent Factory
 
-**84 production-ready AI agent prompts + generators that create more. Not just prompts — a self-expanding library.**
+**105 production-ready AI agent prompts + generators that create more. Not just prompts — a self-expanding library.**
 
 > Most "awesome prompt" repos give you static text files. Agent Factory gives you a complete system: curated agent prompts, industry playbooks, a growing glossary, department guides, and **generators that create fresh content using free LLM APIs.**
 
@@ -202,11 +202,11 @@ MIT — use it however you want.
 
 ## Stats
 
-- **84** curated agent prompts
+- **105** agent prompts (84 curated + 21 generated)
 - **12** departments covered
 - **20** industry playbooks
-- **49** glossary terms (and growing)
-- **12** department guides
+- **58** glossary terms (and growing)
+- **12** department guides (freshly regenerated)
 - **6** quality gate scripts
 - **6** LLM providers supported
 - **0** external dependencies for quality gates

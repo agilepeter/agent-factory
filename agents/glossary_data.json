@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-03-08",
-    "count": 49
+    "updated": "2026-04-05",
+    "count": 58
   },
   "terms": [
     {
@@ -395,6 +395,78 @@
       "definition": "A model registry is like a library catalog for your AI models. It records each model version, its training data, performance metrics, and who approved it, so you can quickly find the right model for a job. When you pull a model from the registry, you know exactly which \u2018book\u2019 you\u2019re reading, avoiding accidental mix\u2011ups or using stale models.",
       "category": "infrastructure",
       "added_date": "2026-03-08"
+    },
+    {
+      "id": "chain-of-thought-prompting",
+      "term": "Chain-of-Thought Prompting",
+      "aka": null,
+      "definition": "Asking the model to show its work step by step, like solving a math problem on paper instead of guessing the final answer. It improves accuracy by breaking complex tasks into smaller reasoning steps. Think of it as narrating your thinking out loud to get to a better conclusion.",
+      "category": "techniques",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "transfer-learning",
+      "term": "Transfer Learning",
+      "aka": null,
+      "definition": "Using knowledge gained while solving one problem and applying it to a different but related problem. It's like a carpenter who's great at building houses using those skills to build sheds more efficiently. Instead of training a model from scratch, you leverage pre-existing knowledge.",
+      "category": "models",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "knowledge-distillation",
+      "term": "Knowledge Distillation",
+      "aka": null,
+      "definition": "Knowledge distillation is like having a experienced teacher simplify complex lessons for a new student. It's a technique where a smaller, simpler model learns from a larger, more complex one, retaining the essential knowledge but making it more efficient. This helps deploy AI models in environments with limited resources, such as mobile devices or embedded systems. By distilling the knowledge, the smaller model can still make accurate predictions without needing the full complexity of the original model.",
+      "category": "techniques",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "dataset-shift",
+      "term": "Dataset Shift",
+      "aka": null,
+      "definition": "Dataset shift is like moving a restaurant to a new location - the menu stays the same, but the customers and their preferences change. In AI, it refers to the change in data distribution between training and testing, which can affect the model's performance. For example, a model trained on images of cars taken during the day may not perform well on images taken at night. This shift can happen due to changes in the environment, population, or other factors, and it's essential to consider it when training and deploying AI models.",
+      "category": "concepts",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "data-augmentation",
+      "term": "Data Augmentation",
+      "aka": null,
+      "definition": "Data augmentation is like photocopying a picture, then cutting it up and reassembling it to create new versions. This helps train AI models to be more robust by exposing them to different variations of the same data. For example, if you're training a model to recognize dogs, data augmentation might involve rotating, flipping, or adding noise to pictures of dogs to create new training examples.",
+      "category": "techniques",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "model-finetuning-compatibility",
+      "term": "Model Compatibility",
+      "aka": null,
+      "definition": "Like making sure a new app works with your phone\u2019s operating system \u2014 not every AI model can run on every platform or tool. Check compatibility before deploying, or it won\u2019t start, scale, or respond the way you expect.",
+      "category": "infrastructure",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "gradient-descent",
+      "term": "Gradient Descent",
+      "aka": null,
+      "definition": "Gradient descent is like hiking down a mountain in thick fog. You can't see the bottom (the lowest error), so you feel around to find the steepest downward slope at your feet and take a step in that direction. Repeat until you're as low as you can get, hoping you've found the true bottom and not just a local dip.",
+      "category": "concepts",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "overfitting",
+      "term": "Overfitting",
+      "aka": null,
+      "definition": "Overfitting is like a student who memorizes the answers to a practice test instead of learning the material. They might ace the practice test, but they'll bomb the real thing because they don't understand the underlying concepts. In AI, overfitting happens when a model is too closely fit to the training data and doesn't generalize well to new, unseen data.",
+      "category": "concepts",
+      "added_date": "2026-04-05"
+    },
+    {
+      "id": "regularization",
+      "term": "Regularization",
+      "aka": null,
+      "definition": "Regularization is like adding a stabilizer to a bike - it helps the model not to overfit the training data by reducing its complexity. Think of it as a way to prevent the model from becoming too specialized in the training examples, so it can generalize better to new, unseen data. This is achieved by adding a penalty term to the loss function, which discourages large weights.",
+      "category": "techniques",
+      "added_date": "2026-04-05"
     }
   ]
 }
