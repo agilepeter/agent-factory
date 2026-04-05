@@ -18,7 +18,7 @@ agent-factory/
 │   └── bonus_prompts.json     # Auto-generated bonus prompts
 │
 ├── generators/                # The factory
-│   ├── llm_providers.py       # Multi-provider LLM fallback (5 providers)
+│   ├── llm_providers.py       # Multi-provider LLM fallback (6 providers)
 │   ├── generate_bonus_prompts.py   # Create new agent prompts
 │   ├── generate_dept_guides.py     # Create department guides
 │   ├── generate_glossary_terms.py  # Expand the glossary
@@ -118,7 +118,7 @@ python generate_glossary_terms.py --dry-run  # preview
 The generators use a multi-provider fallback chain — if one provider is rate-limited, it automatically tries the next:
 
 ```
-Cerebras → Groq → Gemini → SambaNova → Cloudflare Workers AI
+Gemini → Cerebras → CF Workers AI → Groq → SambaNova → OpenRouter
 ```
 
 All providers offer free tiers. You only need **one** API key to get started.
@@ -208,5 +208,5 @@ MIT — use it however you want.
 - **49** glossary terms (and growing)
 - **12** department guides
 - **6** quality gate scripts
-- **5** LLM providers supported
+- **6** LLM providers supported
 - **0** external dependencies for quality gates

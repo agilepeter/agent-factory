@@ -1,11 +1,13 @@
 """Unified LLM provider module with fallback chains.
 
-Five providers, three chains:
-  - "morning": Cerebras -> Groq -> Gemini -> SambaNova -> CF Workers AI
-  - "default": Groq -> Gemini -> Cerebras -> SambaNova -> CF Workers AI
-  - "fast":    Cerebras -> Gemini -> SambaNova
+Six providers, three chains:
+  - "morning": Gemini -> Cerebras -> CF-AI -> Groq -> SambaNova -> OpenRouter
+  - "default": Groq -> Gemini -> Cerebras -> SambaNova -> CF-AI -> OpenRouter
+  - "fast":    Cerebras -> Gemini -> SambaNova -> Groq -> CF-AI -> OpenRouter
 
 All providers share retry logic for 429/rate-limit errors.
+Round-robin rotation spreads load across providers.
+Per-provider call budgets prevent over-reliance on any single provider.
 
 Setup:
   Copy .env.example to .env and add your API keys.
@@ -29,13 +31,29 @@ CEREBRAS_API_KEY = os.getenv("CEREBRAS_API_KEY")
 SAMBANOVA_API_KEY = os.getenv("SAMBANOVA_API_KEY")
 CF_AI_API_TOKEN = os.getenv("CF_AI_API_TOKEN")
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # --- Model IDs ---
 GROQ_MODEL = "llama-3.3-70b-versatile"
 GEMINI_MODEL = "gemini-2.0-flash"
-CEREBRAS_MODEL = "gpt-oss-120b"
+CEREBRAS_MODEL = "qwen-3-235b-a22b-instruct-2507"
 SAMBANOVA_MODEL = "Meta-Llama-3.3-70B-Instruct"
 CF_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct"
+
+# --- Per-provider call budgets (per process lifetime) ---
+_CALL_BUDGETS = {
+    "Cerebras": 12,
+    "Groq": 8,
+    "Gemini": 30,
+    "SambaNova": 6,
+    "CF-AI": 20,
+    "OpenRouter": 50,
+}
+_call_counts = {name: 0 for name in _CALL_BUDGETS}
+
+# --- Round-robin rotation counter ---
+_rotation_counter = 0
 
 # --- Gemini client (lazy init to avoid import-time crash if key missing) ---
 _gemini_client = None
@@ -63,6 +81,16 @@ def _is_daily_limit(error):
 
 # Track providers that hit daily limits — skip retries for the rest of this process
 _exhausted_providers = set()
+
+
+def _is_over_budget(name):
+    """Check if a provider has exceeded its call budget."""
+    return _call_counts.get(name, 0) >= _CALL_BUDGETS.get(name, 0)
+
+
+def _record_call(name):
+    """Record a successful call against a provider's budget."""
+    _call_counts[name] = _call_counts.get(name, 0) + 1
 
 
 # --- Individual provider functions ---
@@ -121,6 +149,17 @@ def _cf_ai_generate(prompt, max_tokens=4096):
     return resp.json()["choices"][0]["message"]["content"]
 
 
+def _openrouter_generate(prompt, max_tokens=4096):
+    resp = _requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
+        json={"model": OPENROUTER_MODEL, "messages": [{"role": "user", "content": prompt}], "max_tokens": max_tokens},
+        timeout=120,
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
+
+
 def _try_provider(name, func, prompt, max_tokens, retries=2):
     """Try a provider with retry on rate-limit errors.
 
@@ -131,7 +170,9 @@ def _try_provider(name, func, prompt, max_tokens, retries=2):
         return None
     for attempt in range(retries + 1):
         try:
-            return func(prompt, max_tokens)
+            result = func(prompt, max_tokens)
+            _record_call(name)
+            return result
         except Exception as e:
             if _is_rate_limited(e):
                 if _is_daily_limit(e):
@@ -152,11 +193,12 @@ def _try_provider(name, func, prompt, max_tokens, retries=2):
 
 CHAINS = {
     "morning": [
-        ("Cerebras", CEREBRAS_API_KEY, _cerebras_generate),
-        ("Groq", GROQ_API_KEY, _groq_generate),
         ("Gemini", GEMINI_API_KEY, _gemini_generate),
-        ("SambaNova", SAMBANOVA_API_KEY, _sambanova_generate),
+        ("Cerebras", CEREBRAS_API_KEY, _cerebras_generate),
         ("CF-AI", CF_AI_API_TOKEN, _cf_ai_generate),
+        ("Groq", GROQ_API_KEY, _groq_generate),
+        ("SambaNova", SAMBANOVA_API_KEY, _sambanova_generate),
+        ("OpenRouter", OPENROUTER_API_KEY, _openrouter_generate),
     ],
     "default": [
         ("Groq", GROQ_API_KEY, _groq_generate),
@@ -164,17 +206,25 @@ CHAINS = {
         ("Cerebras", CEREBRAS_API_KEY, _cerebras_generate),
         ("SambaNova", SAMBANOVA_API_KEY, _sambanova_generate),
         ("CF-AI", CF_AI_API_TOKEN, _cf_ai_generate),
+        ("OpenRouter", OPENROUTER_API_KEY, _openrouter_generate),
     ],
     "fast": [
         ("Cerebras", CEREBRAS_API_KEY, _cerebras_generate),
         ("Gemini", GEMINI_API_KEY, _gemini_generate),
         ("SambaNova", SAMBANOVA_API_KEY, _sambanova_generate),
+        ("Groq", GROQ_API_KEY, _groq_generate),
+        ("CF-AI", CF_AI_API_TOKEN, _cf_ai_generate),
+        ("OpenRouter", OPENROUTER_API_KEY, _openrouter_generate),
     ],
 }
 
 
 def generate(prompt, chain="default", max_tokens=4096):
     """Generate text using the specified fallback chain.
+
+    Uses round-robin rotation to spread load across providers.
+    Respects per-provider call budgets; over-budget providers are
+    tried as a last resort if all in-budget providers fail.
 
     Args:
         prompt: The prompt text.
@@ -187,12 +237,30 @@ def generate(prompt, chain="default", max_tokens=4096):
     Raises:
         Exception: If all providers fail.
     """
+    global _rotation_counter
     providers = CHAINS.get(chain, CHAINS["default"])
 
-    for name, api_key, func in providers:
+    # Round-robin: rotate starting position each call
+    offset = _rotation_counter % len(providers)
+    _rotation_counter += 1
+    rotated = providers[offset:] + providers[:offset]
+
+    # Pass 1: try in-budget providers
+    skipped_over_budget = []
+    for name, api_key, func in rotated:
         if not api_key:
             continue
+        if _is_over_budget(name):
+            skipped_over_budget.append((name, api_key, func))
+            continue
         print(f"  [LLM] {name} ({get_model_name(name) or 'unknown'})")
+        result = _try_provider(name, func, prompt, max_tokens)
+        if result is not None:
+            return result
+
+    # Pass 2: over-budget fallback (last resort)
+    for name, api_key, func in skipped_over_budget:
+        print(f"  [LLM] {name} (over budget, fallback) ({get_model_name(name) or 'unknown'})")
         result = _try_provider(name, func, prompt, max_tokens)
         if result is not None:
             return result
@@ -228,5 +296,5 @@ def get_model_name(provider_name):
     """Get model ID for a provider name."""
     return {
         "Groq": GROQ_MODEL, "Gemini": GEMINI_MODEL, "Cerebras": CEREBRAS_MODEL,
-        "SambaNova": SAMBANOVA_MODEL, "CF-AI": CF_AI_MODEL,
+        "SambaNova": SAMBANOVA_MODEL, "CF-AI": CF_AI_MODEL, "OpenRouter": OPENROUTER_MODEL,
     }.get(provider_name)
