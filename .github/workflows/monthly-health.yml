@@ -1,0 +1,90 @@
+name: Monthly Health Check
+
+on:
+  schedule:
+    - cron: '0 14 1 * *'  # 1st of month, 14:00 UTC (10:00 AM EDT)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate JSON data files + compute current counts
+        id: counts
+        run: |
+          python <<'PY' >> "$GITHUB_OUTPUT"
+          import json, sys
+          from pathlib import Path
+
+          stats = {}
+          errors = []
+
+          def load(p):
+              try:
+                  return json.load(open(p))
+              except Exception as e:
+                  errors.append(f"{p}: {e}")
+                  return None
+
+          agents = load("agents/agents_data.json") or {}
+          stats["agents"] = sum(len(d.get("agents", [])) for d in agents.get("departments", {}).values())
+          stats["departments"] = len(agents.get("departments", {}))
+
+          playbooks = load("agents/playbooks_data.json") or {}
+          stats["playbooks"] = len(playbooks.get("playbooks", []))
+
+          glossary = load("agents/glossary_data.json") or {}
+          stats["glossary"] = len(glossary.get("terms", []))
+
+          guides = load("agents/guides_data.json") or {}
+          stats["guides"] = len(guides.get("guides", []))
+
+          bonus = load("agents/bonus_prompts.json") or {}
+          stats["bonus"] = sum(len(v) for v in bonus.get("departments", {}).values())
+
+          if errors:
+              print("\n".join(errors), file=sys.stderr)
+              sys.exit(1)
+
+          for k, v in stats.items():
+              print(f"{k}={v}")
+          print(f"summary={stats['agents']} agents · {stats['playbooks']} playbooks · {stats['glossary']} glossary · {stats['guides']} guides · {stats['bonus']} bonus prompts")
+          PY
+
+      - name: Update README badge + last-verified date
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          BADGE="_📊 Library: ${{ steps.counts.outputs.summary }} · Last verified by CI: $DATE_"
+          if grep -q "^_📊 Library:" README.md; then
+            # Use a delimiter unlikely to appear in the line
+            python -c "
+          import re
+          p = open('README.md').read()
+          p = re.sub(r'^_📊 Library:.*\$', '$BADGE', p, flags=re.MULTILINE)
+          open('README.md','w').write(p)
+          "
+          else
+            printf "\n---\n\n%s\n" "$BADGE" >> README.md
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          if ! git diff --staged --quiet; then
+            git commit -m "ci: monthly health check $(date -u +%Y-%m) — ${{ steps.counts.outputs.summary }}"
+            git push
+          else
+            echo "README already up-to-date"
+          fi
