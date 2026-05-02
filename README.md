@@ -210,3 +210,7 @@ MIT — use it however you want.
 - **6** quality gate scripts
 - **6** LLM providers supported
 - **0** external dependencies for quality gates
+
+---
+
+_📊 Library: 84 agents · 20 playbooks · 58 glossary · 12 guides · 21 bonus prompts · Last verified by CI: 
