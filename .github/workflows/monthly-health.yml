@@ -11,7 +11,7 @@ permissions:
 jobs:
   health:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -19,6 +19,36 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install generator dependencies
+        run: pip install -r requirements.txt
+
+      # ── Content generation (non-fatal: a provider hiccup must not break the
+      #    health check or the date stamp below). The failover chain skips any
+      #    provider whose key is missing. ──────────────────────────────────────
+      - name: Generate new glossary terms
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SAMBANOVA_API_KEY: ${{ secrets.SAMBANOVA_API_KEY }}
+          CF_AI_API_TOKEN: ${{ secrets.CF_AI_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python generators/generate_glossary_terms.py --count=5
+
+      - name: Generate new bonus prompts
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SAMBANOVA_API_KEY: ${{ secrets.SAMBANOVA_API_KEY }}
+          CF_AI_API_TOKEN: ${{ secrets.CF_AI_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python generators/generate_bonus_prompts.py
+
+      # ── Validate JSON + recompute counts (runs AFTER generation so the badge
+      #    reflects freshly added content). A broken JSON file fails the run. ──
       - name: Validate JSON data files + compute current counts
         id: counts
         run: |
@@ -64,13 +94,12 @@ jobs:
       - name: Update README badge + last-verified date
         run: |
           DATE=$(date -u +%Y-%m-%d)
-          BADGE="_📊 Library: ${{ steps.counts.outputs.summary }} · Last verified by CI: $DATE_"
+          BADGE="_📊 Library: ${{ steps.counts.outputs.summary }} · Last verified by CI: ${DATE}_"
           if grep -q "^_📊 Library:" README.md; then
-            # Use a delimiter unlikely to appear in the line
             python -c "
           import re
           p = open('README.md').read()
-          p = re.sub(r'^_📊 Library:.*\$', '$BADGE', p, flags=re.MULTILINE)
+          p = re.sub(r'^_📊 Library:.*\$', '''$BADGE''', p, flags=re.MULTILINE)
           open('README.md','w').write(p)
           "
           else
@@ -81,10 +110,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
+          git add agents/*.json README.md
           if ! git diff --staged --quiet; then
             git commit -m "ci: monthly health check $(date -u +%Y-%m) — ${{ steps.counts.outputs.summary }}"
             git push
           else
-            echo "README already up-to-date"
+            echo "Nothing changed this run"
           fi

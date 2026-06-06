@@ -1,0 +1,5 @@
+# Runtime deps for the content generators (generators/*.py)
+python-dotenv>=1.0
+requests>=2.31
+groq>=0.11
+google-genai>=0.3

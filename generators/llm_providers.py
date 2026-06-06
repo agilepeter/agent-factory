@@ -35,7 +35,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # --- Model IDs ---
 GROQ_MODEL = "llama-3.3-70b-versatile"
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 CEREBRAS_MODEL = "qwen-3-235b-a22b-instruct-2507"
 SAMBANOVA_MODEL = "Meta-Llama-3.3-70B-Instruct"
 CF_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
