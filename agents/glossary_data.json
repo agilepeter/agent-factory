@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-04-05",
-    "count": 58
+    "updated": "2026-06-06",
+    "count": 62
   },
   "terms": [
     {
@@ -467,6 +467,38 @@
       "definition": "Regularization is like adding a stabilizer to a bike - it helps the model not to overfit the training data by reducing its complexity. Think of it as a way to prevent the model from becoming too specialized in the training examples, so it can generalize better to new, unseen data. This is achieved by adding a penalty term to the loss function, which discourages large weights.",
       "category": "techniques",
       "added_date": "2026-04-05"
+    },
+    {
+      "id": "hyperparameter-tuning",
+      "term": "Hyperparameter Tuning",
+      "aka": null,
+      "definition": "The process of finding the optimal settings for your model that aren't learned from the data itself. These are knobs like learning rate or batch size that you set *before* training begins. Think of it as finding the perfect oven temperature and cooking time for a new recipe to get the best result.",
+      "category": "techniques",
+      "added_date": "2026-06-06"
+    },
+    {
+      "id": "supervised-learning",
+      "term": "Supervised Learning",
+      "aka": null,
+      "definition": "This is when you train a model using data that has already been labeled with the correct answers. Think of it like teaching a child to identify fruits by showing them pictures of apples labeled 'apple' and bananas labeled 'banana'. The model learns to map inputs (like images) to outputs (like names) by minimizing errors between its predictions and your provided labels.",
+      "category": "concepts",
+      "added_date": "2026-06-06"
+    },
+    {
+      "id": "exotic-sampling",
+      "term": "Exotic Sampling",
+      "aka": null,
+      "definition": "Exotic sampling is like searching for a specific type of rare seashell on a beach. Instead of randomly walking along the shore, you focus on areas where that shell is most likely to be found, increasing your chances of discovering it. In AI, this means using specialized techniques to sample data from regions of the input space that are most relevant to the task at hand, rather than sampling randomly. This approach can improve the efficiency and accuracy of model training and inference.",
+      "category": "techniques",
+      "added_date": "2026-06-06"
+    },
+    {
+      "id": "data-leakage",
+      "term": "Data Leakage",
+      "aka": null,
+      "definition": "Data leakage is like having a cheat sheet for a test - it's when your model gets access to information it shouldn't have, which can make it seem smarter than it really is. This can happen when your training data includes information that won't be available when the model is actually used. For example, if you're training a model to predict stock prices based on news headlines, but the headlines include the stock prices themselves, that's data leakage. It can make your model look great during training, but perform poorly in the real world.",
+      "category": "concepts",
+      "added_date": "2026-06-06"
     }
   ]
 }
