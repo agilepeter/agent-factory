@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-06-06",
-    "count": 62
+    "updated": "2026-07-01",
+    "count": 67
   },
   "terms": [
     {
@@ -499,6 +499,46 @@
       "definition": "Data leakage is like having a cheat sheet for a test - it's when your model gets access to information it shouldn't have, which can make it seem smarter than it really is. This can happen when your training data includes information that won't be available when the model is actually used. For example, if you're training a model to predict stock prices based on news headlines, but the headlines include the stock prices themselves, that's data leakage. It can make your model look great during training, but perform poorly in the real world.",
       "category": "concepts",
       "added_date": "2026-06-06"
+    },
+    {
+      "id": "mlops",
+      "term": "MLOps",
+      "aka": "Machine Learning Operations",
+      "definition": "MLOps (Machine Learning Operations) is a set of practices for reliably and efficiently deploying and maintaining machine learning models in production. Think of it as DevOps for AI, covering everything from model development to continuous integration and delivery, monitoring, and retraining. It ensures your AI systems run smoothly and deliver value in the real world.",
+      "category": "infrastructure",
+      "added_date": "2026-07-01"
+    },
+    {
+      "id": "latent-space",
+      "term": "Latent Space",
+      "aka": null,
+      "definition": "Latent space is a compressed, abstract representation of data where similar inputs are mapped closer together. Imagine it as a hidden map where every unique item in your dataset gets a specific, mathematically defined location based on its characteristics. This space allows models to understand underlying relationships and generate new, similar data points. It's where the 'meaning' of data is encoded.",
+      "category": "concepts",
+      "added_date": "2026-07-01"
+    },
+    {
+      "id": "out-of-distribution",
+      "term": "Out-of-Distribution",
+      "aka": null,
+      "definition": "Think of out-of-distribution like a GPS navigation system that's only been trained on city roads, but then you take it off-roading. It's when a model encounters data that's significantly different from what it was trained on, making it harder for the model to make accurate predictions. This can happen when there's a change in the environment, new types of data, or unexpected user behavior, and it's a key challenge in building robust AI systems.",
+      "category": "concepts",
+      "added_date": "2026-07-01"
+    },
+    {
+      "id": "evaluation-metric",
+      "term": "Evaluation Metric",
+      "aka": null,
+      "definition": "An evaluation metric is like a report card for your AI model. It measures how well the model is doing its job, such as accuracy, precision, or recall. Think of it as a scorecard that helps you determine if your model is making good predictions or not. For example, in a spam detection model, the evaluation metric might be the percentage of correctly classified spam emails.",
+      "category": "concepts",
+      "added_date": "2026-07-01"
+    },
+    {
+      "id": "data-preprocessing",
+      "term": "Data Preprocessing",
+      "aka": null,
+      "definition": "Data preprocessing is like preparing ingredients for a recipe. You need to clean, chop, and mix the data in the right way so your AI model can use it effectively. This step is crucial because bad data can lead to bad predictions, just like bad ingredients can ruin a dish. By preprocessing your data, you're setting your model up for success.",
+      "category": "techniques",
+      "added_date": "2026-07-01"
     }
   ]
 }
