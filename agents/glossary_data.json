@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-07-01",
-    "count": 67
+    "updated": "2026-08-01",
+    "count": 72
   },
   "terms": [
     {
@@ -539,6 +539,46 @@
       "definition": "Data preprocessing is like preparing ingredients for a recipe. You need to clean, chop, and mix the data in the right way so your AI model can use it effectively. This step is crucial because bad data can lead to bad predictions, just like bad ingredients can ruin a dish. By preprocessing your data, you're setting your model up for success.",
       "category": "techniques",
       "added_date": "2026-07-01"
+    },
+    {
+      "id": "feature-store",
+      "term": "Feature Store",
+      "aka": null,
+      "definition": "A centralized repository for managing and serving features for machine learning models. Think of it as a meticulously organized pantry for all the ingredients your models need, ensuring consistency across training and inference environments. It streamlines data access and helps prevent data duplication, making sure features are fresh and reliable.",
+      "category": "infrastructure",
+      "added_date": "2026-08-01"
+    },
+    {
+      "id": "pre-training",
+      "term": "Pre-training",
+      "aka": null,
+      "definition": "The initial, extensive training of a large model on a massive, diverse dataset. This phase teaches the model broad knowledge and general patterns, much like a child learning general knowledge before specializing in a particular subject in school. The resulting pre-trained model can then be adapted for specific tasks via fine-tuning.",
+      "category": "models",
+      "added_date": "2026-08-01"
+    },
+    {
+      "id": "knowledge-graph",
+      "term": "Knowledge Graph",
+      "aka": null,
+      "definition": "A knowledge graph is like a massive, interconnected spider web of information. It's a way to store and organize data as entities and their relationships, making it easy to query and reason about the information. For example, a knowledge graph for a movie database might have entities like 'movies', 'actors', and 'directors', and relationships like 'starring' or 'directed'. This allows you to ask complex questions like 'What movies has this actor been in?' and get accurate answers.",
+      "category": "concepts",
+      "added_date": "2026-08-01"
+    },
+    {
+      "id": "knowledge-retention",
+      "term": "Knowledge Retention",
+      "aka": null,
+      "definition": "Knowledge retention is like a librarian keeping track of the books that are already on the shelves. It's the ability of a model to remember what it has learned from its training data, even when it's faced with new or unexpected information. This is important because it helps the model to avoid 'forgetting' what it already knows, and to build on its existing knowledge when learning new things.",
+      "category": "concepts",
+      "added_date": "2026-08-01"
+    },
+    {
+      "id": "explainability",
+      "term": "Explainability",
+      "aka": null,
+      "definition": "Explainability is like trying to understand how a referee made a call in a sports game. You want to know the reasoning behind the decision, not just the outcome. In AI, explainability refers to the ability to interpret and understand the decisions made by a model, which is crucial for building trust and identifying potential biases. Think of it as getting a peek into the model's thought process.",
+      "category": "concepts",
+      "added_date": "2026-08-01"
     }
   ]
 }

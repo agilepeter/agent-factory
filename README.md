@@ -213,4 +213,4 @@ MIT — use it however you want.
 
 ---
 
-_📊 Library: 84 agents · 20 playbooks · 67 glossary · 12 guides · 42 bonus prompts · Last verified by CI: 2026-07-01_
+_📊 Library: 84 agents · 20 playbooks · 72 glossary · 12 guides · 51 bonus prompts · Last verified by CI: 2026-08-01_
