@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-08-01",
-    "count": 72
+    "updated": "2026-09-01",
+    "count": 77
   },
   "terms": [
     {
@@ -579,6 +579,46 @@
       "definition": "Explainability is like trying to understand how a referee made a call in a sports game. You want to know the reasoning behind the decision, not just the outcome. In AI, explainability refers to the ability to interpret and understand the decisions made by a model, which is crucial for building trust and identifying potential biases. Think of it as getting a peek into the model's thought process.",
       "category": "concepts",
       "added_date": "2026-08-01"
+    },
+    {
+      "id": "foundation-model",
+      "term": "Foundation Model",
+      "aka": null,
+      "definition": "A Foundation Model is a very large AI model, typically pre-trained on massive amounts of diverse, unlabeled data. It develops broad capabilities that can be adapted to many downstream tasks, often through fine-tuning. Think of it like a powerful, general-purpose operating system that can run many different applications once specialized, rather than a single-purpose app.",
+      "category": "models",
+      "added_date": "2026-09-01"
+    },
+    {
+      "id": "mixture-of-experts",
+      "term": "Mixture of Experts",
+      "aka": "MoE",
+      "definition": "A Mixture of Experts (MoE) model uses several smaller, specialized neural networks (experts) and a 'router' to decide which expert processes each incoming piece of data. Think of it as a specialized consulting firm where the front desk directs your specific problem to the best-suited consultant. This allows the model to scale to many more parameters efficiently, as only a few experts are active for any given input.",
+      "category": "models",
+      "added_date": "2026-09-01"
+    },
+    {
+      "id": "knowledge-graph-embedding",
+      "term": "KGE",
+      "aka": "Knowledge Graph Embedding",
+      "definition": "Think of a knowledge graph as a massive, intricate web of relationships between entities. Knowledge Graph Embedding is like assigning a unique GPS coordinate to each entity in this web, so a model can understand how they relate to each other. This helps AI systems reason about complex relationships and make more informed decisions. For example, if 'Paris' and 'France' are close together in this embedded space, a model can infer that Paris is a city in France.",
+      "category": "models",
+      "added_date": "2026-09-01"
+    },
+    {
+      "id": "data-parallelism",
+      "term": "Data Parallelism",
+      "aka": null,
+      "definition": "Data parallelism is like having multiple cooks in the same kitchen, each preparing the same dish but with different ingredients. This technique allows you to split your data into smaller chunks and process them simultaneously across multiple computing units, such as GPUs or CPUs, to speed up training times. By doing so, you can significantly reduce the time it takes to train large models on massive datasets. This approach is particularly useful when working with big data and complex models that require significant computational resources.",
+      "category": "techniques",
+      "added_date": "2026-09-01"
+    },
+    {
+      "id": "data-quality",
+      "term": "Data Quality",
+      "aka": null,
+      "definition": "Think of data quality like the freshness of ingredients in a recipe. Just as a great chef can't make a delicious dish with rotten ingredients, a powerful AI model can't produce good results with low-quality data. Data quality issues, such as inconsistencies, missing values, or biases, can significantly impact the performance and reliability of AI systems.",
+      "category": "concepts",
+      "added_date": "2026-09-01"
     }
   ]
 }
