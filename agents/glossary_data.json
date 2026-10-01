@@ -1,7 +1,7 @@
 {
   "meta": {
-    "updated": "2026-09-01",
-    "count": 77
+    "updated": "2026-10-01",
+    "count": 81
   },
   "terms": [
     {
@@ -619,6 +619,38 @@
       "definition": "Think of data quality like the freshness of ingredients in a recipe. Just as a great chef can't make a delicious dish with rotten ingredients, a powerful AI model can't produce good results with low-quality data. Data quality issues, such as inconsistencies, missing values, or biases, can significantly impact the performance and reliability of AI systems.",
       "category": "concepts",
       "added_date": "2026-09-01"
+    },
+    {
+      "id": "validation-set",
+      "term": "Validation Set",
+      "aka": null,
+      "definition": "A distinct portion of your dataset used to evaluate a model's performance and tune its hyperparameters *during* training. It acts like a practice exam you take before the final, helping you refine your model's settings and architecture. This helps ensure your model isn't just memorizing the training data and can generalize to new, unseen examples.",
+      "category": "techniques",
+      "added_date": "2026-10-01"
+    },
+    {
+      "id": "unsupervised-learning",
+      "term": "Unsupervised Learning",
+      "aka": null,
+      "definition": "This is a type of machine learning where the model learns patterns directly from data that hasn't been labeled or explicitly categorized. Think of it like organizing a messy closet without knowing what goes where; you group similar items together based on their inherent characteristics. It's used for tasks like clustering, anomaly detection, and dimensionality reduction.",
+      "category": "techniques",
+      "added_date": "2026-10-01"
+    },
+    {
+      "id": "data-versioning",
+      "term": "Data Versioning",
+      "aka": null,
+      "definition": "Data versioning is like tracking changes to a recipe book. Each time you update a dataset, you create a new version, so you can keep a record of what changed, when, and why. This helps you reproduce results, debug issues, and collaborate with others. It's essential for maintaining data integrity and ensuring that your AI models are trained on the right data.",
+      "category": "infrastructure",
+      "added_date": "2026-10-01"
+    },
+    {
+      "id": "early-stopping",
+      "term": "Early Stopping",
+      "aka": null,
+      "definition": "Early stopping is like having a manager who checks on a worker's progress and stops them when they've done enough. In machine learning, it's a technique where you monitor a model's performance on a validation set during training and stop the training process when the performance starts to degrade. This helps prevent overfitting and saves computational resources. By stopping early, you can avoid wasting time and resources on unnecessary training iterations.",
+      "category": "techniques",
+      "added_date": "2026-10-01"
     }
   ]
 }
